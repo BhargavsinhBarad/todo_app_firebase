@@ -150,7 +150,7 @@ class login extends StatelessWidget {
                                     .login(email: email!, password: password!);
                                 if (res['user'] != null) {
                                   log("***********************");
-                                  Get.to(home());
+                                  Get.off(home());
                                 }
                               },
                               height: 50,

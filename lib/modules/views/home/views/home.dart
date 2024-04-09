@@ -1,36 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_randomcolor/flutter_randomcolor.dart';
 import 'package:get/get.dart';
 import 'package:random_string/random_string.dart';
 import 'package:todo_app_firebase/modules/utils/helper/firestoreHelper.dart';
 import 'package:todo_app_firebase/modules/views/details/views/detail.dart';
 import 'package:todo_app_firebase/modules/views/home/controller/streamcontroller.dart';
 
-class home extends StatefulWidget {
+class home extends StatelessWidget {
   home({super.key});
 
-  @override
-  State<home> createState() => _homeState();
-}
-
-class _homeState extends State<home> {
   String? title;
 
   String? Task;
-  Stream? datastream;
-  streamdata() async {
-    datastream = await FirestoreHelper.firestoreHelper.fetchtask();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    streamdata();
-  }
 
   StreamController streamController = Get.put(StreamController());
 
@@ -42,6 +23,18 @@ class _homeState extends State<home> {
         title: const Text("TODO"),
         centerTitle: true,
         toolbarHeight: 100,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.changeTheme(
+                  Get.isDarkMode ? ThemeData.light() : ThemeData.dark());
+            },
+            icon: const Icon(
+              Icons.sunny,
+              size: 30,
+            ),
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orangeAccent,
@@ -51,10 +44,12 @@ class _homeState extends State<home> {
               height: Get.height * 0.7,
               width: Get.width,
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      topLeft: Radius.circular(20))),
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(20),
+                  topLeft: Radius.circular(20),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
@@ -114,7 +109,7 @@ class _homeState extends State<home> {
                         onTap: () async {
                           String id = randomAlphaNumeric(10);
                           Map<String, dynamic> data = {
-                            "id": "$id",
+                            "id": id,
                             "title": "$title",
                             "task": "$Task",
                           };
@@ -149,7 +144,7 @@ class _homeState extends State<home> {
       ),
       body: GetBuilder<StreamController>(
         builder: (ctx) => StreamBuilder(
-          stream: datastream,
+          stream: FirestoreHelper.firestoreHelper.fetchtask(),
           builder: (ctx, AsyncSnapshot snapshot) {
             if (snapshot.hasError) {
               return Text("${snapshot.error}");

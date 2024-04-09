@@ -15,7 +15,7 @@ class FirestoreHelper {
         .set(data);
   }
 
-  Future<Stream<QuerySnapshot>> fetchtask() async {
+  Stream<QuerySnapshot> fetchtask() {
     return firestore
         .collection("${AuthHelper.authHelper.auth.currentUser!.email}")
         .snapshots();
