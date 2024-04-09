@@ -1,7 +1,7 @@
 <div align="center">
 
 
-# **Khata Book App**
+# **Todo App**
 ---
 </div>
 
